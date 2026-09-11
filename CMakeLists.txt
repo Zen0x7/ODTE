@@ -46,6 +46,14 @@ enable_testing()
 add_subdirectory(tests)
 
 # ── CPack ─────────────────────────────────────────────────────
+include(GNUInstallDirs)
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
+  set(ODTE_ARCH "arm64")
+else()
+  set(ODTE_ARCH "amd64")
+endif()
+
 set(CPACK_PACKAGE_NAME "odte")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orquestador de Documentos Tributarios Electronicos")
@@ -54,9 +62,12 @@ set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
 set(CPACK_PACKAGE_CONTACT "https://github.com/Zen0x7/ODTE")
 
 set(CPACK_GENERATOR "TGZ;DEB;RPM")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-Linux-${ODTE_ARCH}")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Zen0x7")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-json-dev")
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${ODTE_ARCH})
 set(CPACK_RPM_PACKAGE_LICENSE "AGPLv3")
 set(CPACK_RPM_PACKAGE_REQUIRES "boost-json")
+set(CPACK_RPM_PACKAGE_ARCHITECTURE ${ODTE_ARCH})
 
 include(CPack)
