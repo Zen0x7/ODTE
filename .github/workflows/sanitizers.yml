@@ -26,15 +26,15 @@ jobs:
             name: LeakSanitizer
             flags: "-fsanitize=leak -fno-omit-frame-pointer -g"
           - arch: arm64
-            runner: ubuntu-latest-arm64
+            runner: ubuntu-24.04-arm
             name: AddressSanitizer
             flags: "-fsanitize=address -fno-omit-frame-pointer -g"
           - arch: arm64
-            runner: ubuntu-latest-arm64
+            runner: ubuntu-24.04-arm
             name: UndefinedBehaviorSanitizer
             flags: "-fsanitize=undefined -fno-omit-frame-pointer -g"
           - arch: arm64
-            runner: ubuntu-latest-arm64
+            runner: ubuntu-24.04-arm
             name: LeakSanitizer
             flags: "-fsanitize=leak -fno-omit-frame-pointer -g"
 
