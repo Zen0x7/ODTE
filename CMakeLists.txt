@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ── Dependencias ──────────────────────────────────────────────
+# Boost
+find_package(Boost REQUIRED COMPONENTS json)
+
 # GTest
 include(FetchContent)
 FetchContent_Declare(
@@ -24,6 +27,7 @@ add_library(odte STATIC
   src/version.cpp
 )
 target_include_directories(odte PUBLIC ${ODTE_INCLUDE_DIR})
+target_link_libraries(odte PUBLIC Boost::json)
 
 # ── Tests ─────────────────────────────────────────────────────
 enable_testing()
