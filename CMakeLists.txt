@@ -19,9 +19,11 @@ FetchContent_MakeAvailable(googletest)
 set(ODTE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(ODTE_SCHEMA_DIR  ${CMAKE_SOURCE_DIR}/schemas)
 
-# ── Library (por ahora stub, crecerá con el desarrollo) ───────
-add_library(odte INTERFACE)
-target_include_directories(odte INTERFACE ${ODTE_INCLUDE_DIR})
+# ── Library ───────────────────────────────────────────────────
+add_library(odte STATIC
+  src/version.cpp
+)
+target_include_directories(odte PUBLIC ${ODTE_INCLUDE_DIR})
 
 # ── Tests ─────────────────────────────────────────────────────
 enable_testing()
