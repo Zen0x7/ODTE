@@ -41,7 +41,6 @@ enable_testing()
 add_subdirectory(tests)
 
 # ── CPack ─────────────────────────────────────────────────────
-include(CPack)
 set(CPACK_PACKAGE_NAME "odte")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orquestador de Documentos Tributarios Electronicos")
@@ -54,3 +53,5 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Zen0x7")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost-json-dev")
 set(CPACK_RPM_PACKAGE_LICENSE "AGPLv3")
 set(CPACK_RPM_PACKAGE_REQUIRES "boost-json")
+
+include(CPack)
