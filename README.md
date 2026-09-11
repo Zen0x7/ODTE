@@ -14,6 +14,7 @@ Orquestador de Documentos Tributarios Electrónicos.
 ### Code Quality
 
 [![codecov](https://codecov.io/gh/Zen0x7/ODTE/branch/master/graph/badge.svg?token=WVBC0KE74R)](https://codecov.io/gh/Zen0x7/ODTE)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_ODTE&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Zen0x7_ODTE)
 [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_ODTE&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Zen0x7_ODTE)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_ODTE&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Zen0x7_ODTE)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_ODTE&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Zen0x7_ODTE)
