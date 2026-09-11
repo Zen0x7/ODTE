@@ -26,8 +26,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake g++ libboost-json-dev rpm
 
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPROJECT_VERSION=${{ steps.version.outputs.VERSION }}
 
       - name: Build
         run: cmake --build build
