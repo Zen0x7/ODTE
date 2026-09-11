@@ -47,8 +47,8 @@ jobs:
         with:
           name: packages-${{ matrix.arch }}
           path: |
-            build/ODTE-*.tar.gz
-            build/odte_*.deb
+            build/odte-*.tar.gz
+            build/odte-*.deb
             build/odte-*.rpm
 
   release:
