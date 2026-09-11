@@ -4,6 +4,15 @@ Orquestador de Documentos Tributarios Electrónicos.
 
 ## Badges
 
+### CI
+
+[![Build](https://github.com/Zen0x7/ODTE/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/Zen0x7/ODTE/actions/workflows/build.yml)
+[![Sanitizers](https://github.com/Zen0x7/ODTE/actions/workflows/sanitizers.yml/badge.svg?branch=master)](https://github.com/Zen0x7/ODTE/actions/workflows/sanitizers.yml)
+[![Coverage](https://github.com/Zen0x7/ODTE/actions/workflows/coverage.yml/badge.svg?branch=master)](https://github.com/Zen0x7/ODTE/actions/workflows/coverage.yml)
+[![SonarCloud](https://github.com/Zen0x7/ODTE/actions/workflows/sonarcloud.yml/badge.svg?branch=master)](https://github.com/Zen0x7/ODTE/actions/workflows/sonarcloud.yml)
+
+### Code Quality
+
 [![codecov](https://codecov.io/gh/Zen0x7/ODTE/branch/master/graph/badge.svg?token=WVBC0KE74R)](https://codecov.io/gh/Zen0x7/ODTE)
 [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_ODTE&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Zen0x7_ODTE)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_ODTE&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Zen0x7_ODTE)
