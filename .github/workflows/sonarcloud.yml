@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libboost-json-dev lcov
+          sudo apt-get install -y cmake g++ libboost-json-dev gcovr
 
       - name: Configure
         run: >
@@ -36,9 +36,7 @@ jobs:
       - name: Generate coverage report
         run: |
           cd build
-          lcov --capture --directory CMakeFiles/odte.dir --output-file coverage.info --ignore-errors empty,unused
-          lcov --remove coverage.info '*/_deps/*' --output-file coverage.info --ignore-errors unused
-          lcov --list coverage.info
+          gcovr --root .. --filter '../src/' --xml-pretty -o coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v8.1.0
