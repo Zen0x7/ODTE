@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>
-#include <string>
 
-// ── Placeholder: cada test real irá aquí ─────────────────────
+#include "odte/version.hpp"
 
-TEST(SchemasDTE, SchemaFilesExist) {
-    // Verificar que los schemas están disponibles
-    EXPECT_TRUE(true);
+TEST(VersionTest, GetVersionReturnsExpectedValue) {
+    auto v = odte::get_version();
+    EXPECT_EQ(v, "0.0.0");
 }

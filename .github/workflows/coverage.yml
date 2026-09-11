@@ -34,8 +34,7 @@ jobs:
       - name: Capture coverage
         run: |
           cd build
-          lcov --capture --directory . --output-file coverage.info --no-external
-          lcov --remove coverage.info '*/_deps/*' '*/tests/*' --output-file coverage.info --ignore-errors unused,empty
+          lcov --capture --directory ../src --output-file coverage.info --no-external
           lcov --list coverage.info
 
       - name: Upload to Codecov

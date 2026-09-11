@@ -10,4 +10,4 @@ constexpr int VERSION_PATCH = 0;
 
 std::string_view get_version();
 
-} // namespace odte
+}  // namespace odte
