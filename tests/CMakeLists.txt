@@ -1,6 +1,7 @@
 # ── Tests ─────────────────────────────────────────────────────
 add_executable(odte_tests
   test_main.cpp
+  test_domain.cpp
 )
 
 target_link_libraries(odte_tests

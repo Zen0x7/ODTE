@@ -37,6 +37,13 @@ endif()
 # ── Library ───────────────────────────────────────────────────
 add_library(odte STATIC
   src/version.cpp
+  src/domain/tax_number.cpp
+  src/domain/document_type.cpp
+  src/domain/date.cpp
+  src/domain/amount.cpp
+  src/domain/folio.cpp
+  src/domain/business_name.cpp
+  src/domain/payment_method.cpp
 )
 target_include_directories(odte PUBLIC ${ODTE_INCLUDE_DIR})
 target_link_libraries(odte PUBLIC Boost::json)
