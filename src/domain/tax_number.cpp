@@ -9,7 +9,7 @@ TaxNumber::TaxNumber(const char* value)
     : boost::contract::constructor_precondition<TaxNumber>([&] {
         BOOST_CONTRACT_ASSERT(value != nullptr);
       }) {
-  const std::size_t len = std::strlen(value);
+  const auto len = std::strlen(value);
   if (len < 3 || len > kMaxSize) {
     valid_ = false;
     return;
@@ -36,8 +36,8 @@ TaxNumber::TaxNumber(const char* value)
     return;
   }
 
-  const char last = value[len - 1];
-  if (!std::isdigit(static_cast<unsigned char>(last)) && last != 'K' &&
+  if (const char last = value[len - 1];
+      !std::isdigit(static_cast<unsigned char>(last)) && last != 'K' &&
       last != 'k') {
     valid_ = false;
     return;
@@ -48,8 +48,9 @@ TaxNumber::TaxNumber(const char* value)
   valid_ = true;
 
   boost::contract::check post = boost::contract::constructor(this)
-      .postcondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_ == (std::strlen(data_.data()) >= 3));
+      .postcondition([valid_ = &valid_, data_ = &data_] {
+        BOOST_CONTRACT_ASSERT(
+            *valid_ == (std::strlen(data_->data()) >= 3));
       });
 }
 
@@ -61,22 +62,6 @@ const char* TaxNumber::value() const {
 bool TaxNumber::is_valid() const {
   boost::contract::check c = boost::contract::function();
   return valid_;
-}
-
-bool TaxNumber::operator==(const TaxNumber& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return valid_ && std::strcmp(data_.data(), other.data_.data()) == 0;
-}
-
-bool TaxNumber::operator!=(const TaxNumber& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return !(*this == other);
 }
 
 }  // namespace odte::domain

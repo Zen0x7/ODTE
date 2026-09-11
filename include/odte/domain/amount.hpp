@@ -13,12 +13,31 @@ class Amount {
   std::int64_t value() const;
   bool is_valid() const;
 
-  bool operator==(const Amount& other) const;
-  bool operator!=(const Amount& other) const;
-  bool operator<(const Amount& other) const;
-  bool operator<=(const Amount& other) const;
-  bool operator>(const Amount& other) const;
-  bool operator>=(const Amount& other) const;
+  friend bool operator==(const Amount& lhs, const Amount& rhs) {
+    return lhs.value_ == rhs.value_;
+  }
+
+  friend bool operator!=(const Amount& lhs, const Amount& rhs) {
+    return lhs.value_ != rhs.value_;
+  }
+
+  friend bool operator<(const Amount& lhs, const Amount& rhs) {
+    return lhs.value_ < rhs.value_;
+  }
+
+  friend bool operator<=(const Amount& lhs, const Amount& rhs) {
+    return lhs.value_ <= rhs.value_;
+  }
+
+  friend bool operator>(const Amount& lhs, const Amount& rhs) {
+    return lhs.value_ > rhs.value_;
+  }
+
+  friend bool operator>=(const Amount& lhs, const Amount& rhs) {
+    return lhs.value_ >= rhs.value_;
+  }
+
+  friend Amount operator+(const Amount& a, const Amount& b);
 
   bool add(const Amount& other, Amount& result) const;
 
@@ -30,7 +49,5 @@ class Amount {
   std::int64_t value_{0};
   bool valid_{false};
 };
-
-Amount operator+(const Amount& a, const Amount& b);
 
 }  // namespace odte::domain
