@@ -10,35 +10,47 @@ jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     name: SonarCloud Analysis
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Set up Python for gcovr
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install gcovr
+        run: pip install gcovr==7.2
+
+      - name: Install Build Wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v7
+
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libboost-json-dev gcovr
+          sudo apt-get install -y cmake g++ libboost-json-dev
 
       - name: Configure
-        run: >
-          cmake -S . -B build
-          -DODTE_COVERAGE=ON
-          -DCMAKE_BUILD_TYPE=Debug
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DODTE_COVERAGE=ON
 
-      - name: Build
-        run: cmake --build build
+      - name: Build with Build Wrapper
+        run: build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build
 
       - name: Test
         run: cd build && ctest --output-on-failure
 
-      - name: Generate coverage report
-        run: |
-          cd build
-          gcovr --root $GITHUB_WORKSPACE --filter "$GITHUB_WORKSPACE/src/" --xml-pretty -o coverage.xml
+      - name: Collect coverage
+        run: cd build && gcovr --sonarqube -o coverage.xml --root ..
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v8.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            --define sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json
+            --define sonar.coverageReportPaths=build/coverage.xml
