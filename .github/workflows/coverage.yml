@@ -22,7 +22,7 @@ jobs:
       - name: Configure
         run: >
           cmake -S . -B build
-          -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
+          -DODTE_COVERAGE=ON
           -DCMAKE_BUILD_TYPE=Debug
 
       - name: Build
@@ -34,7 +34,8 @@ jobs:
       - name: Capture coverage
         run: |
           cd build
-          lcov --capture --directory CMakeFiles/odte.dir --output-file coverage.info --no-external --ignore-errors empty,unused
+          lcov --capture --directory CMakeFiles/odte.dir --output-file coverage.info --ignore-errors empty,unused
+          lcov --remove coverage.info '*/_deps/*' --output-file coverage.info --ignore-errors unused
           lcov --list coverage.info
 
       - name: Upload to Codecov

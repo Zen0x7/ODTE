@@ -22,6 +22,13 @@ FetchContent_MakeAvailable(googletest)
 set(ODTE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(ODTE_SCHEMA_DIR  ${CMAKE_SOURCE_DIR}/schemas)
 
+# ── Coverage ──────────────────────────────────────────────────
+option(ODTE_COVERAGE "Enable code coverage" OFF)
+if(ODTE_COVERAGE)
+  add_compile_options(--coverage -fprofile-arcs -ftest-coverage -O0)
+  add_link_options(--coverage)
+endif()
+
 # ── Library ───────────────────────────────────────────────────
 add_library(odte STATIC
   src/version.cpp
