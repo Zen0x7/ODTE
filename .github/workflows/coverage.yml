@@ -35,7 +35,7 @@ jobs:
         run: |
           cd build
           lcov --capture --directory . --output-file coverage.info --no-external
-          lcov --remove coverage.info '*/_deps/*' '*/tests/*' --output-file coverage.info --ignore-errors unused
+          lcov --remove coverage.info '*/_deps/*' '*/tests/*' --output-file coverage.info --ignore-errors unused,empty
           lcov --list coverage.info
 
       - name: Upload to Codecov
