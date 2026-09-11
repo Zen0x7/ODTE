@@ -62,3 +62,45 @@ Cada XSD define la estructura XML que el SII espera recibir o devolver.
 - Boost.JSON (parser JSON)
 - FlatBuffers (serialización binaria)
 - clang-format / clang-tidy (linting)
+
+## Convenciones de Nombre
+
+**Todo el código debe estar en inglés.** El domain model debe ser autoexplicativo y claro para cualquier desarrollador.
+
+### Reglas de Nombre
+
+- **Enums**: `PascalCase` con valores descriptivos
+  - ✅ `PaymentMethod::CREDIT_CARD`
+  - ❌ `MedioPago::TC`
+
+- **Value Objects**: `PascalCase` con intención clara
+  - ✅ `BusinessName`, `DocumentType`, `PaymentMethod`
+  - ❌ `RazonSocial`, `TipoDTE`, `MedioPago`
+
+- **Structs**: `PascalCase` con nombres descriptivos
+  - ✅ `ElectronicDocument`, `DocumentHeader`, `LineItem`
+  - ❌ `DTE`, `Encabezado`, `Detalle`
+
+- **Métodos**: `snake_case` con nombre que inicia con verbo
+  - ✅ `is_valid()`, `to_string()`, `get_value()`
+  - ❌ `valid()`, `valor()`
+
+### Ejemplo
+
+```cpp
+// Bueno: Claro, autoexplicativo
+enum class PaymentMethod : std::uint8_t {
+  CHECK = 0,
+  PROMISSORY_NOTE = 1,
+  CASH = 2,
+  CREDIT_CARD = 4,
+};
+
+// Malo: Críptico, requiere traducción
+enum class MedioPago : std::uint8_t {
+  CH = 0,
+  LT = 1,
+  EF = 2,
+  TC = 4,
+};
+```
