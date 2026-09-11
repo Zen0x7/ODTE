@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libboost-json-dev rpm
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: cd build && ctest --output-on-failure
+
+      - name: Package
+        run: cd build && cpack -G "TGZ;DEB;RPM"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/odte-*.tar.gz build/odte-*.deb build/odte-*.rpm
+          generate_release_notes: true
