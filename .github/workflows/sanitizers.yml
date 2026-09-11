@@ -12,17 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sanitizer: [asan, ubsan, lsan]
         include:
-          - sanitizer: asan
+          - name: AddressSanitizer
             flags: "-fsanitize=address -fno-omit-frame-pointer -g"
-            name: AddressSanitizer
-          - sanitizer: ubsan
+          - name: UndefinedBehaviorSanitizer
             flags: "-fsanitize=undefined -fno-omit-frame-pointer -g"
-            name: UndefinedBehaviorSanitizer
-          - sanitizer: lsan
+          - name: LeakSanitizer
             flags: "-fsanitize=leak -fno-omit-frame-pointer -g"
-            name: LeakSanitizer
 
     name: ${{ matrix.name }}
 
@@ -45,56 +41,3 @@ jobs:
 
       - name: Test
         run: cd build && ctest --output-on-failure
-
-  coverage:
-    runs-on: ubuntu-latest
-    name: Code Coverage
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake g++ lcov
-
-      - name: Configure
-        run: >
-          cmake -S . -B build
-          -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
-          -DCMAKE_BUILD_TYPE=Debug
-
-      - name: Build
-        run: cmake --build build
-
-      - name: Test
-        run: cd build && ctest --output-on-failure
-
-      - name: Capture coverage
-        run: |
-          cd build
-          lcov --capture --directory . --output-file coverage.info --no-external
-          lcov --remove coverage.info '/usr/*' '*/tests/*' '*/third_party/*' --output-file coverage.info --ignore-errors unused
-          lcov --list coverage.info
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: build/coverage.info
-          fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  sonarcloud:
-    runs-on: ubuntu-latest
-    name: SonarCloud Analysis
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v8.1.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
