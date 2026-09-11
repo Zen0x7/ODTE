@@ -8,19 +8,37 @@ on:
 
 jobs:
   sanitizers:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: AddressSanitizer
+          - arch: amd64
+            runner: ubuntu-latest
+            name: AddressSanitizer
             flags: "-fsanitize=address -fno-omit-frame-pointer -g"
-          - name: UndefinedBehaviorSanitizer
+          - arch: amd64
+            runner: ubuntu-latest
+            name: UndefinedBehaviorSanitizer
             flags: "-fsanitize=undefined -fno-omit-frame-pointer -g"
-          - name: LeakSanitizer
+          - arch: amd64
+            runner: ubuntu-latest
+            name: LeakSanitizer
+            flags: "-fsanitize=leak -fno-omit-frame-pointer -g"
+          - arch: arm64
+            runner: ubuntu-latest-arm64
+            name: AddressSanitizer
+            flags: "-fsanitize=address -fno-omit-frame-pointer -g"
+          - arch: arm64
+            runner: ubuntu-latest-arm64
+            name: UndefinedBehaviorSanitizer
+            flags: "-fsanitize=undefined -fno-omit-frame-pointer -g"
+          - arch: arm64
+            runner: ubuntu-latest-arm64
+            name: LeakSanitizer
             flags: "-fsanitize=leak -fno-omit-frame-pointer -g"
 
-    name: ${{ matrix.name }}
+    name: ${{ matrix.name }} (${{ matrix.arch }})
 
     steps:
       - uses: actions/checkout@v4

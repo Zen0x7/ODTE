@@ -8,8 +8,17 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    name: Build & Test
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-latest-arm64
+
+    name: Build & Test (${{ matrix.arch }})
 
     steps:
       - uses: actions/checkout@v4
