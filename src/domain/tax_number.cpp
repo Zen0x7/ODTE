@@ -6,10 +6,10 @@
 namespace odte::domain {
 
 TaxNumber::TaxNumber(const char* value)
-    : boost::contract::constructor_precondition<TaxNumber>([&] {
+    : boost::contract::constructor_precondition<TaxNumber>([&value] {
         BOOST_CONTRACT_ASSERT(value != nullptr);
       }) {
-  const auto len = std::strlen(value);
+  const auto len = strnlen(value, kMaxSize + 1);
   if (len < 3 || len > kMaxSize) {
     valid_ = false;
     return;

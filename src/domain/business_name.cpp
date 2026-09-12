@@ -5,10 +5,10 @@
 namespace odte::domain {
 
 BusinessName::BusinessName(const char* value)
-    : boost::contract::constructor_precondition<BusinessName>([&] {
+    : boost::contract::constructor_precondition<BusinessName>([&value] {
         BOOST_CONTRACT_ASSERT(value != nullptr);
       }) {
-  const auto len = std::strlen(value);
+  const auto len = strnlen(value, kMaxSize + 1);
   if (len == 0 || len > kMaxSize) {
     valid_ = false;
     return;
