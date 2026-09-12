@@ -5,10 +5,9 @@
 
 namespace odte::domain {
 
-TaxNumber::TaxNumber(const char* value)
-    : boost::contract::constructor_precondition<TaxNumber>([&value] {
-        BOOST_CONTRACT_ASSERT(value != nullptr);
-      }) {
+TaxNumber::TaxNumber(const char* value) {
+  ODTE_EXPECTS(value != nullptr);
+
   const auto len = strnlen(value, kMaxSize + 1);
   if (len < 3 || len > kMaxSize) {
     valid_ = false;
@@ -47,21 +46,12 @@ TaxNumber::TaxNumber(const char* value)
   data_[len] = '\0';
   valid_ = true;
 
-  boost::contract::check post = boost::contract::constructor(this)
-      .postcondition([valid_ = &valid_, data_ = &data_] {
-        BOOST_CONTRACT_ASSERT(
-            *valid_ == (std::strlen(data_->data()) >= 3));
-      });
+  ODTE_ENSURES(std::strlen(data_.data()) >= 3);
+  invariant();
 }
 
-const char* TaxNumber::value() const {
-  boost::contract::check c = boost::contract::function();
-  return data_.data();
-}
+const char* TaxNumber::value() const { return data_.data(); }
 
-bool TaxNumber::is_valid() const {
-  boost::contract::check c = boost::contract::function();
-  return valid_;
-}
+bool TaxNumber::is_valid() const { return valid_; }
 
 }  // namespace odte::domain

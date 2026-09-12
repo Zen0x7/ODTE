@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <boost/contract.hpp>
-
+#include "odte/contract.hpp"
 #include "odte/domain/tax_number.hpp"
 
 using namespace odte::domain;
@@ -23,7 +22,7 @@ TEST(TaxNumberTest, EmptyTaxNumber) {
 }
 
 TEST(TaxNumberTest, NullTaxNumber) {
-    EXPECT_THROW(TaxNumber(nullptr), boost::contract::assertion_failure);
+    EXPECT_THROW(TaxNumber(nullptr), odte::contract::violation);
 }
 
 TEST(TaxNumberTest, Equality) {
@@ -32,6 +31,15 @@ TEST(TaxNumberTest, Equality) {
     TaxNumber c("87654321-K");
     EXPECT_EQ(a, b);
     EXPECT_NE(a, c);
+}
+
+TEST(TaxNumberTest, EqualityWithInvalid) {
+    TaxNumber valid("12345678-5");
+    TaxNumber invalid("12345");
+    EXPECT_FALSE(valid == invalid);
+    EXPECT_FALSE(invalid == valid);
+    EXPECT_TRUE(valid != invalid);
+    EXPECT_TRUE(invalid != valid);
 }
 
 TEST(TaxNumberTest, LowercaseK) {

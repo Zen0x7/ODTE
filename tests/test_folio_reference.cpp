@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <boost/contract.hpp>
+#include <string>
 
+#include "odte/contract.hpp"
 #include "odte/domain/folio_reference.hpp"
 
 using namespace odte::domain;
@@ -17,8 +18,14 @@ TEST(FolioReferenceTest, Empty) {
     EXPECT_FALSE(folio.is_valid());
 }
 
+TEST(FolioReferenceTest, TooLong) {
+    std::string value(19, 'A');
+    FolioReference folio(value.c_str());
+    EXPECT_FALSE(folio.is_valid());
+}
+
 TEST(FolioReferenceTest, Null) {
-    EXPECT_THROW(FolioReference(nullptr), boost::contract::assertion_failure);
+    EXPECT_THROW(FolioReference(nullptr), odte::contract::violation);
 }
 
 TEST(FolioReferenceTest, Equality) {
@@ -27,4 +34,13 @@ TEST(FolioReferenceTest, Equality) {
     FolioReference c("XYZ-999");
     EXPECT_EQ(a, b);
     EXPECT_NE(a, c);
+}
+
+TEST(FolioReferenceTest, EqualityWithInvalid) {
+    FolioReference valid("ABC-123");
+    FolioReference invalid("");
+    EXPECT_FALSE(valid == invalid);
+    EXPECT_FALSE(invalid == valid);
+    EXPECT_TRUE(valid != invalid);
+    EXPECT_TRUE(invalid != valid);
 }

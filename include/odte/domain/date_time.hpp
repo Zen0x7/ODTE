@@ -1,8 +1,8 @@
 #pragma once
 
-#include <boost/contract.hpp>
 #include <cstdint>
 
+#include "odte/contract.hpp"
 #include "odte/domain/date.hpp"
 
 namespace odte::domain {
@@ -13,11 +13,11 @@ class DateTime {
   DateTime(const Date& date, std::uint8_t hour, std::uint8_t minute,
            std::uint8_t second);
 
-  const Date& date() const;
-  std::uint8_t hour() const;
-  std::uint8_t minute() const;
-  std::uint8_t second() const;
-  bool is_valid() const;
+  [[nodiscard]] const Date& date() const;
+  [[nodiscard]] std::uint8_t hour() const;
+  [[nodiscard]] std::uint8_t minute() const;
+  [[nodiscard]] std::uint8_t second() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend bool operator==(const DateTime& lhs, const DateTime& rhs) {
     return lhs.date_ == rhs.date_ && lhs.hour_ == rhs.hour_ &&
@@ -43,10 +43,10 @@ class DateTime {
 
   void invariant() const {
     if (valid_) {
-      BOOST_CONTRACT_ASSERT(date_.is_valid());
-      BOOST_CONTRACT_ASSERT(hour_ < 24);
-      BOOST_CONTRACT_ASSERT(minute_ < 60);
-      BOOST_CONTRACT_ASSERT(second_ < 60);
+      ODTE_INVARIANT(date_.is_valid());
+      ODTE_INVARIANT(hour_ < 24);
+      ODTE_INVARIANT(minute_ < 60);
+      ODTE_INVARIANT(second_ < 60);
     }
   }
 

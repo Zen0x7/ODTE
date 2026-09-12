@@ -1,7 +1,8 @@
 #pragma once
 
-#include <boost/contract.hpp>
 #include <cstdint>
+
+#include "odte/contract.hpp"
 
 namespace odte::domain {
 
@@ -12,8 +13,8 @@ class Percentage {
   Percentage() = default;
   explicit Percentage(std::uint32_t hundredths);
 
-  std::uint32_t hundredths() const;
-  bool is_valid() const;
+  [[nodiscard]] std::uint32_t hundredths() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend bool operator==(const Percentage& lhs, const Percentage& rhs) {
     return lhs.hundredths_ == rhs.hundredths_;
@@ -41,8 +42,8 @@ class Percentage {
 
   void invariant() const {
     if (valid_) {
-      BOOST_CONTRACT_ASSERT(hundredths_ >= 1);
-      BOOST_CONTRACT_ASSERT(hundredths_ <= kMaxHundredths);
+      ODTE_INVARIANT(hundredths_ >= 1);
+      ODTE_INVARIANT(hundredths_ <= kMaxHundredths);
     }
   }
 

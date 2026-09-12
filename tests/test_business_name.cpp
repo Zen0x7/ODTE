@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <boost/contract.hpp>
+#include <string>
 
+#include "odte/contract.hpp"
 #include "odte/domain/business_name.hpp"
 
 using namespace odte::domain;
@@ -17,8 +18,14 @@ TEST(BusinessNameTest, Empty) {
     EXPECT_FALSE(name.is_valid());
 }
 
+TEST(BusinessNameTest, TooLong) {
+    std::string value(101, 'A');
+    BusinessName name(value.c_str());
+    EXPECT_FALSE(name.is_valid());
+}
+
 TEST(BusinessNameTest, Null) {
-    EXPECT_THROW(BusinessName(nullptr), boost::contract::assertion_failure);
+    EXPECT_THROW(BusinessName(nullptr), odte::contract::violation);
 }
 
 TEST(BusinessNameTest, Equality) {
@@ -29,4 +36,13 @@ TEST(BusinessNameTest, Equality) {
     EXPECT_TRUE(a != c);
     EXPECT_FALSE(a == c);
     EXPECT_FALSE(a != b);
+}
+
+TEST(BusinessNameTest, EqualityWithInvalid) {
+    BusinessName valid("Acme Corp");
+    BusinessName invalid("");
+    EXPECT_FALSE(valid == invalid);
+    EXPECT_FALSE(invalid == valid);
+    EXPECT_TRUE(valid != invalid);
+    EXPECT_TRUE(invalid != valid);
 }

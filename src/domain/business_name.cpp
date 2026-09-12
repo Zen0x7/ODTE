@@ -4,10 +4,9 @@
 
 namespace odte::domain {
 
-BusinessName::BusinessName(const char* value)
-    : boost::contract::constructor_precondition<BusinessName>([&value] {
-        BOOST_CONTRACT_ASSERT(value != nullptr);
-      }) {
+BusinessName::BusinessName(const char* value) {
+  ODTE_EXPECTS(value != nullptr);
+
   const auto len = strnlen(value, kMaxSize + 1);
   if (len == 0 || len > kMaxSize) {
     valid_ = false;
@@ -18,21 +17,12 @@ BusinessName::BusinessName(const char* value)
   data_[len] = '\0';
   valid_ = true;
 
-  boost::contract::check post = boost::contract::constructor(this)
-      .postcondition([valid_ = &valid_, data_ = &data_] {
-        BOOST_CONTRACT_ASSERT(
-            *valid_ == (std::strlen(data_->data()) <= kMaxSize));
-      });
+  ODTE_ENSURES(std::strlen(data_.data()) <= kMaxSize);
+  invariant();
 }
 
-const char* BusinessName::value() const {
-  boost::contract::check c = boost::contract::function();
-  return data_.data();
-}
+const char* BusinessName::value() const { return data_.data(); }
 
-bool BusinessName::is_valid() const {
-  boost::contract::check c = boost::contract::function();
-  return valid_;
-}
+bool BusinessName::is_valid() const { return valid_; }
 
 }  // namespace odte::domain

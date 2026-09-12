@@ -9,7 +9,17 @@ Checks: >
   performance-*,
   readability-*,
   -modernize-use-trailing-return-type,
-  -readability-magic-numbers
+  -readability-magic-numbers,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -misc-non-private-member-variables-in-classes,
+  -misc-include-cleaner,
+  -cppcoreguidelines-macro-usage,
+  -google-build-using-namespace,
+  -misc-const-correctness,
+  -readability-uppercase-literal-suffix,
+  -readability-identifier-length,
+  -clang-analyzer-optin.core.EnumCastOutOfRange
 
 WarningsAsErrors: ''
 HeaderFilterRegex: 'include/.*\.hpp$'

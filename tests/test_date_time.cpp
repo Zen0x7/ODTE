@@ -43,6 +43,13 @@ TEST(DateTimeTest, Equality) {
     EXPECT_FALSE(a != b);
 }
 
+TEST(DateTimeTest, EqualityBranches) {
+    DateTime base(Date(20240115), 10, 0, 0);
+    EXPECT_NE(base, DateTime(Date(20240116), 10, 0, 0));
+    EXPECT_NE(base, DateTime(Date(20240115), 10, 1, 0));
+    EXPECT_NE(base, DateTime(Date(20240115), 10, 0, 1));
+}
+
 TEST(DateTimeTest, Comparison) {
     DateTime a(Date(20240115), 10, 0, 0);
     DateTime b(Date(20240116), 10, 0, 0);
