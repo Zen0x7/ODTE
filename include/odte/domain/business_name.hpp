@@ -19,8 +19,14 @@ class BusinessName
   const char* value() const;
   bool is_valid() const;
 
-  bool operator==(const BusinessName& other) const;
-  bool operator!=(const BusinessName& other) const;
+  friend bool operator==(const BusinessName& lhs, const BusinessName& rhs) {
+    return lhs.valid_ && rhs.valid_ &&
+           std::strcmp(lhs.data_.data(), rhs.data_.data()) == 0;
+  }
+
+  friend bool operator!=(const BusinessName& lhs, const BusinessName& rhs) {
+    return !(lhs == rhs);
+  }
 
   void invariant() const {
     if (valid_) {

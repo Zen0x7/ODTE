@@ -20,12 +20,29 @@ class Date {
   std::uint8_t month() const;
   std::uint8_t day() const;
 
-  bool operator==(const Date& other) const;
-  bool operator!=(const Date& other) const;
-  bool operator<(const Date& other) const;
-  bool operator<=(const Date& other) const;
-  bool operator>(const Date& other) const;
-  bool operator>=(const Date& other) const;
+  friend bool operator==(const Date& lhs, const Date& rhs) {
+    return lhs.value_ == rhs.value_;
+  }
+
+  friend bool operator!=(const Date& lhs, const Date& rhs) {
+    return lhs.value_ != rhs.value_;
+  }
+
+  friend bool operator<(const Date& lhs, const Date& rhs) {
+    return lhs.value_ < rhs.value_;
+  }
+
+  friend bool operator<=(const Date& lhs, const Date& rhs) {
+    return lhs.value_ <= rhs.value_;
+  }
+
+  friend bool operator>(const Date& lhs, const Date& rhs) {
+    return lhs.value_ > rhs.value_;
+  }
+
+  friend bool operator>=(const Date& lhs, const Date& rhs) {
+    return lhs.value_ >= rhs.value_;
+  }
 
   void invariant() const {
     if (valid_) {

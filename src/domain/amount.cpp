@@ -7,8 +7,8 @@ namespace odte::domain {
 
 Amount::Amount(std::int64_t value) : value_(value), valid_(value >= 0) {
   boost::contract::check c = boost::contract::constructor(this)
-      .postcondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_ == (value >= 0));
+      .postcondition([valid_ = &valid_, value = value_] {
+        BOOST_CONTRACT_ASSERT(*valid_ == (value >= 0));
       });
 }
 
@@ -22,65 +22,11 @@ bool Amount::is_valid() const {
   return valid_;
 }
 
-bool Amount::operator==(const Amount& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return value_ == other.value_;
-}
-
-bool Amount::operator!=(const Amount& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return value_ != other.value_;
-}
-
-bool Amount::operator<(const Amount& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return value_ < other.value_;
-}
-
-bool Amount::operator<=(const Amount& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return value_ <= other.value_;
-}
-
-bool Amount::operator>(const Amount& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return value_ > other.value_;
-}
-
-bool Amount::operator>=(const Amount& other) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
-      });
-  return value_ >= other.value_;
-}
-
 bool Amount::add(const Amount& other, Amount& result) const {
   boost::contract::check c = boost::contract::function()
-      .precondition([&] {
-        BOOST_CONTRACT_ASSERT(valid_);
-        BOOST_CONTRACT_ASSERT(other.valid_);
+      .precondition([valid_ = &valid_, other_valid_ = &other.valid_] {
+        BOOST_CONTRACT_ASSERT(*valid_);
+        BOOST_CONTRACT_ASSERT(*other_valid_);
       });
 
   if (value_ > 0 && other.value_ > 0 &&
@@ -93,7 +39,7 @@ bool Amount::add(const Amount& other, Amount& result) const {
 
 Amount operator+(const Amount& a, const Amount& b) {
   boost::contract::check c = boost::contract::function()
-      .precondition([&] {
+      .precondition([&a, &b] {
         BOOST_CONTRACT_ASSERT(a.is_valid());
         BOOST_CONTRACT_ASSERT(b.is_valid());
       });
