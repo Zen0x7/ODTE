@@ -29,10 +29,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ clang-tidy libboost-json-dev
+          sudo apt-get install -y cmake g++ libboost-json-dev
+
+      - name: Install clang-tidy
+        run: pip install clang-tidy==19.1.0.1
 
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
