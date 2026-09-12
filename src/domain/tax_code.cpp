@@ -1,0 +1,99 @@
+#include "odte/domain/tax_code.hpp"
+
+namespace odte::domain {
+
+const char* to_string(TaxCode code) {
+  switch (code) {
+    case TaxCode::COMMERCIAL_MARGIN_VAT:
+      return "14";
+    case TaxCode::TOTAL_WITHHELD_VAT:
+      return "15";
+    case TaxCode::PARTIAL_WITHHELD_VAT:
+      return "16";
+    case TaxCode::MEAT_SLAUGHTER_ADVANCE_VAT:
+      return "17";
+    case TaxCode::MEAT_ADVANCE_VAT:
+      return "18";
+    case TaxCode::FLOUR_ADVANCE_VAT:
+      return "19";
+    case TaxCode::GOLD_JEWELRY_FURS_ADDITIONAL_TAX:
+      return "23";
+    case TaxCode::LIQUORS_DISTILLED_ADDITIONAL_TAX:
+      return "24";
+    case TaxCode::WINE_ADDITIONAL_TAX:
+      return "25";
+    case TaxCode::BEER_ADDITIONAL_TAX:
+      return "26";
+    case TaxCode::SOFT_DRINKS_MINERAL_WATER_ADDITIONAL_TAX:
+      return "27";
+    case TaxCode::DIESEL_SPECIFIC_TAX:
+      return "28";
+    case TaxCode::LEGUMES_WITHHELD_VAT:
+      return "30";
+    case TaxCode::WILD_PRODUCTS_WITHHELD_VAT:
+      return "31";
+    case TaxCode::CATTLE_WITHHELD_VAT:
+      return "32";
+    case TaxCode::WOOD_WITHHELD_VAT:
+      return "33";
+    case TaxCode::WHEAT_WITHHELD_VAT:
+      return "34";
+    case TaxCode::GASOLINE_SPECIFIC_TAX:
+      return "35";
+    case TaxCode::RICE_WITHHELD_VAT:
+      return "36";
+    case TaxCode::HYDROBIOLOGICAL_WITHHELD_VAT:
+      return "37";
+    case TaxCode::SCRAP_WITHHELD_VAT:
+      return "38";
+    case TaxCode::PPA_WITHHELD_VAT:
+      return "39";
+    case TaxCode::OPTIONAL_WITHHELD_VAT:
+      return "40";
+    case TaxCode::CONSTRUCTION_WITHHELD_VAT:
+      return "41";
+    case TaxCode::CARPETS_CAVIAR_WEAPONS_ADDITIONAL_TAX:
+      return "44";
+    case TaxCode::PYROTECHNICS_ADDITIONAL_TAX:
+      return "45";
+    case TaxCode::RESERVED_46:
+      return "46";
+    case TaxCode::RESERVED_47:
+      return "47";
+    case TaxCode::RESERVED_48:
+      return "48";
+    case TaxCode::RESERVED_49:
+      return "49";
+    case TaxCode::RESERVED_50:
+      return "50";
+    case TaxCode::RESERVED_51:
+      return "51";
+    case TaxCode::RESERVED_52:
+      return "52";
+    case TaxCode::RESERVED_53:
+      return "53";
+    case TaxCode::RESERVED_54:
+      return "54";
+    case TaxCode::RESERVED_55:
+      return "55";
+    case TaxCode::SUGARY_DRINKS_ADDITIONAL_TAX:
+      return "271";
+    case TaxCode::RESERVED_301:
+      return "301";
+    case TaxCode::RESERVED_321:
+      return "321";
+    case TaxCode::RESERVED_331:
+      return "331";
+    case TaxCode::RESERVED_341:
+      return "341";
+    case TaxCode::RESERVED_361:
+      return "361";
+    case TaxCode::RESERVED_371:
+      return "371";
+    case TaxCode::RESERVED_481:
+      return "481";
+  }
+  return "0";
+}
+
+}  // namespace odte::domain
