@@ -39,6 +39,12 @@ class Amount {
   }
 
   friend Amount operator+(const Amount& a, const Amount& b) {
+    boost::contract::check c = boost::contract::function()
+        .precondition([&a, &b] {
+          BOOST_CONTRACT_ASSERT(a.is_valid());
+          BOOST_CONTRACT_ASSERT(b.is_valid());
+        });
+
     Amount result;
     if (!a.add(b, result)) {
       throw std::overflow_error("Amount addition overflow");
