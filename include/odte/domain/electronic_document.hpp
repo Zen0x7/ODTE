@@ -3,95 +3,41 @@
 #include <array>
 #include <boost/contract.hpp>
 #include <cstddef>
-#include <cstdint>
 
-#include "odte/domain/amount.hpp"
-#include "odte/domain/business_name.hpp"
-#include "odte/domain/date.hpp"
-#include "odte/domain/document_type.hpp"
-#include "odte/domain/folio.hpp"
-#include "odte/domain/payment_method.hpp"
-#include "odte/domain/tax_number.hpp"
+#include "odte/domain/adjustment.hpp"
+#include "odte/domain/document_header.hpp"
+#include "odte/domain/issuer.hpp"
+#include "odte/domain/line_item.hpp"
+#include "odte/domain/recipient.hpp"
+#include "odte/domain/reference.hpp"
+#include "odte/domain/subtotal_summary.hpp"
+#include "odte/domain/total_amounts.hpp"
 
 namespace odte::domain {
 
-struct DocumentHeader {
-  DocumentType document_type{DocumentType::INVOICE};
-  Folio folio;
-  Date issuance_date;
-};
-
-struct Issuer {
-  TaxNumber tax_number;
-  BusinessName business_name;
-  std::array<char, 81> activity_type{};
-  std::array<char, 21> phone{};
-  std::array<char, 81> email{};
-  std::array<std::uint32_t, 4> economic_activities{};
-  std::size_t economic_activity_count{0};
-};
-
-struct Recipient {
-  TaxNumber tax_number;
-  BusinessName business_name;
-  std::array<char, 41> activity_type{};
-  std::array<char, 71> address{};
-  std::array<char, 21> commune{};
-  std::array<char, 21> city{};
-};
-
-struct Totals {
-  Amount net_amount{0};
-  Amount exempt_amount{0};
-  Amount tax_amount{0};
-  Amount total_amount{0};
-
-  void invariant() const {
-    if (net_amount.is_valid() && exempt_amount.is_valid() &&
-        tax_amount.is_valid() && total_amount.is_valid()) {
-      Amount expected;
-      Amount sum1;
-      Amount sum2;
-      if (net_amount.add(exempt_amount, sum1) && sum1.add(tax_amount, sum2)) {
-        BOOST_CONTRACT_ASSERT(total_amount == sum2);
-      }
-    }
-  }
-};
-
-struct LineItem {
-  std::uint32_t sequence_number{0};
-  std::array<char, 256> description{};
-  std::array<char, 36> code{};
-  std::uint32_t quantity{0};
-  Amount unit_price{0};
-  Amount discount_amount{0};
-  Amount line_total{0};
-
-  void invariant() const {
-    if (quantity > 0 && unit_price.is_valid()) {
-      BOOST_CONTRACT_ASSERT(line_total.is_valid());
-    }
-  }
-};
-
-static constexpr std::size_t kMaxLineItems = 2000;
+static constexpr std::size_t kMaxLineItems = 60;
+static constexpr std::size_t kMaxReferences = 40;
+static constexpr std::size_t kMaxAdjustments = 20;
+static constexpr std::size_t kMaxSubtotalSummaries = 20;
 
 struct ElectronicDocument {
   DocumentHeader header;
   Issuer issuer;
   Recipient recipient;
-  Totals totals;
+  TotalAmounts totals;
   std::array<LineItem, kMaxLineItems> line_items{};
   std::size_t line_item_count{0};
-  PaymentMethod payment_method{PaymentMethod::OTHER};
+  std::array<Reference, kMaxReferences> references{};
+  std::size_t reference_count{0};
+  std::array<Adjustment, kMaxAdjustments> adjustments{};
+  std::size_t adjustment_count{0};
+  std::array<SubtotalSummary, kMaxSubtotalSummaries> subtotal_summaries{};
+  std::size_t subtotal_summary_count{0};
 
   bool add_line_item(const LineItem& item) {
-    boost::contract::check c = boost::contract::public_function<ElectronicDocument>(this)
-        .postcondition([&] {
-          BOOST_CONTRACT_ASSERT(line_item_count <= kMaxLineItems);
-        });
-
+    boost::contract::check c =
+        boost::contract::public_function<ElectronicDocument>(this).postcondition(
+            [&] { BOOST_CONTRACT_ASSERT(line_item_count <= kMaxLineItems); });
     if (line_item_count >= kMaxLineItems) {
       return false;
     }
@@ -100,8 +46,48 @@ struct ElectronicDocument {
     return true;
   }
 
+  bool add_reference(const Reference& reference) {
+    boost::contract::check c =
+        boost::contract::public_function<ElectronicDocument>(this).postcondition(
+            [&] { BOOST_CONTRACT_ASSERT(reference_count <= kMaxReferences); });
+    if (reference_count >= kMaxReferences) {
+      return false;
+    }
+    references[reference_count] = reference;
+    ++reference_count;
+    return true;
+  }
+
+  bool add_adjustment(const Adjustment& adjustment) {
+    boost::contract::check c =
+        boost::contract::public_function<ElectronicDocument>(this).postcondition(
+            [&] { BOOST_CONTRACT_ASSERT(adjustment_count <= kMaxAdjustments); });
+    if (adjustment_count >= kMaxAdjustments) {
+      return false;
+    }
+    adjustments[adjustment_count] = adjustment;
+    ++adjustment_count;
+    return true;
+  }
+
+  bool add_subtotal_summary(const SubtotalSummary& summary) {
+    boost::contract::check c =
+        boost::contract::public_function<ElectronicDocument>(this).postcondition([&] {
+          BOOST_CONTRACT_ASSERT(subtotal_summary_count <= kMaxSubtotalSummaries);
+        });
+    if (subtotal_summary_count >= kMaxSubtotalSummaries) {
+      return false;
+    }
+    subtotal_summaries[subtotal_summary_count] = summary;
+    ++subtotal_summary_count;
+    return true;
+  }
+
   void invariant() const {
     BOOST_CONTRACT_ASSERT(line_item_count <= kMaxLineItems);
+    BOOST_CONTRACT_ASSERT(reference_count <= kMaxReferences);
+    BOOST_CONTRACT_ASSERT(adjustment_count <= kMaxAdjustments);
+    BOOST_CONTRACT_ASSERT(subtotal_summary_count <= kMaxSubtotalSummaries);
   }
 };
 
