@@ -1,9 +1,9 @@
 # ── Tests ─────────────────────────────────────────────────────
 add_executable(odte_tests
-  test_environment.cpp
   test_main.cpp
   test_amount.cpp
   test_business_name.cpp
+  test_contract.cpp
   test_currency.cpp
   test_date.cpp
   test_date_time.cpp

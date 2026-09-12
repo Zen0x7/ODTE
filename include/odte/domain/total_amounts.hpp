@@ -1,9 +1,9 @@
 #pragma once
 
 #include <array>
-#include <boost/contract.hpp>
 #include <cstddef>
 
+#include "odte/contract.hpp"
 #include "odte/domain/amount.hpp"
 #include "odte/domain/percentage.hpp"
 #include "odte/domain/tax_code.hpp"
@@ -28,21 +28,19 @@ struct TotalAmounts {
   std::size_t withheld_tax_count{0};
 
   bool add_withheld_tax(const WithheldTax& tax) {
-    boost::contract::check c =
-        boost::contract::public_function<TotalAmounts>(this).postcondition([&] {
-          BOOST_CONTRACT_ASSERT(withheld_tax_count <= kMaxWithheldTaxes);
-        });
-
     if (withheld_tax_count >= kMaxWithheldTaxes) {
       return false;
     }
     withheld_taxes[withheld_tax_count] = tax;
     ++withheld_tax_count;
+
+    ODTE_ENSURES(withheld_tax_count <= kMaxWithheldTaxes);
+    invariant();
     return true;
   }
 
   void invariant() const {
-    BOOST_CONTRACT_ASSERT(withheld_tax_count <= kMaxWithheldTaxes);
+    ODTE_INVARIANT(withheld_tax_count <= kMaxWithheldTaxes);
   }
 };
 

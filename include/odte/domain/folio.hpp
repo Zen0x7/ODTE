@@ -1,7 +1,8 @@
 #pragma once
 
-#include <boost/contract.hpp>
 #include <cstdint>
+
+#include "odte/contract.hpp"
 
 namespace odte::domain {
 
@@ -41,8 +42,8 @@ class Folio {
 
   void invariant() const {
     if (valid_) {
-      BOOST_CONTRACT_ASSERT(value_ > 0);
-      BOOST_CONTRACT_ASSERT(value_ <= kMaxValue);
+      ODTE_INVARIANT(value_ > 0);
+      ODTE_INVARIANT(value_ <= kMaxValue);
     }
   }
 

@@ -1,14 +1,15 @@
 #pragma once
 
 #include <array>
-#include <boost/contract.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
+
+#include "odte/contract.hpp"
 
 namespace odte::domain {
 
-class TaxNumber
-    : private boost::contract::constructor_precondition<TaxNumber> {
+class TaxNumber {
  public:
   static constexpr std::size_t kMaxSize = 10;  // "99999999-K"
   using Storage = std::array<char, kMaxSize + 1>;
@@ -29,9 +30,7 @@ class TaxNumber
   }
 
   void invariant() const {
-    if (valid_) {
-      BOOST_CONTRACT_ASSERT(data_[0] != '\0');
-    }
+    ODTE_INVARIANT(valid_ == (data_[0] != '\0'));
   }
 
  private:

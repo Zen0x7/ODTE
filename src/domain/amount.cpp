@@ -1,39 +1,40 @@
 #include "odte/domain/amount.hpp"
 
-#include <limits>
-
 namespace odte::domain {
 
-Amount::Amount(std::int64_t value) : value_(value), valid_(value >= 0) {
-  boost::contract::check c = boost::contract::constructor(this)
-      .postcondition([valid_ = &valid_, value = value_] {
-        BOOST_CONTRACT_ASSERT(*valid_ == (value >= 0));
-      });
-}
-
-std::int64_t Amount::value() const {
-  boost::contract::check c = boost::contract::function();
-  return value_;
-}
-
-bool Amount::is_valid() const {
-  boost::contract::check c = boost::contract::function();
-  return valid_;
-}
-
-bool Amount::add(const Amount& other, Amount& result) const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([valid_ = &valid_, other_valid_ = &other.valid_] {
-        BOOST_CONTRACT_ASSERT(*valid_);
-        BOOST_CONTRACT_ASSERT(*other_valid_);
-      });
-
-  if (value_ > 0 && other.value_ > 0 &&
-      value_ > std::numeric_limits<std::int64_t>::max() - other.value_) {
-    return false;
+const char* to_string(AmountError error) {
+  switch (error) {
+    case AmountError::NEGATIVE:
+      return "Negative";
+    case AmountError::EXCEEDS_SCHEMA_MAX:
+      return "Exceeds schema max";
   }
-  result = Amount(value_ + other.value_);
-  return true;
+  return "Unknown";
+}
+
+Amount::Amount(std::int64_t value) : value_(value) {
+  ODTE_EXPECTS(value_ >= 0);
+  ODTE_EXPECTS(value_ <= kMaxValue);
+  invariant();
+}
+
+std::int64_t Amount::value() const noexcept { return value_; }
+
+std::expected<Amount, AmountError> Amount::create(std::int64_t value) {
+  if (value < 0) {
+    return std::unexpected(AmountError::NEGATIVE);
+  }
+  if (value > kMaxValue) {
+    return std::unexpected(AmountError::EXCEEDS_SCHEMA_MAX);
+  }
+  return Amount(value);
+}
+
+std::expected<Amount, AmountError> Amount::add(const Amount& other) const {
+  if (value_ > kMaxValue - other.value_) {
+    return std::unexpected(AmountError::EXCEEDS_SCHEMA_MAX);
+  }
+  return Amount(value_ + other.value_);
 }
 
 }  // namespace odte::domain

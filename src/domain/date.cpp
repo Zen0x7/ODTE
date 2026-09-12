@@ -22,8 +22,6 @@ constexpr std::uint8_t max_day(std::uint16_t year, std::uint8_t month) {
 }  // namespace
 
 Date::Date(std::uint32_t value) : value_(value) {
-  boost::contract::check c = boost::contract::constructor(this);
-
   const auto y = static_cast<std::uint16_t>(value / 10000);
   const auto m = static_cast<std::uint8_t>((value % 10000) / 100);
   const auto d = static_cast<std::uint8_t>(value % 100);
@@ -35,21 +33,19 @@ Date::Date(std::uint32_t value) : value_(value) {
 
   valid_ = (d <= max_day(y, m));
 
-  boost::contract::check post = boost::contract::constructor(this)
-      .postcondition([valid_ = &valid_, value_ = &value_] {
-        BOOST_CONTRACT_ASSERT(
-            *valid_ ? (*value_ >= 20000101 && *value_ <= 20501231) : true);
-      });
+  ODTE_ENSURES(value_ >= 20000101);
+  ODTE_ENSURES(value_ <= 20501231);
+  invariant();
 }
 
 Date Date::from_components(std::uint16_t year, std::uint8_t month,
                            std::uint8_t day) {
-  boost::contract::check c = boost::contract::function()
-      .precondition([year, month, day] {
-        BOOST_CONTRACT_ASSERT(year >= 2000 && year <= 2050);
-        BOOST_CONTRACT_ASSERT(month >= 1 && month <= 12);
-        BOOST_CONTRACT_ASSERT(day >= 1 && day <= max_day(year, month));
-      });
+  ODTE_EXPECTS(year >= 2000);
+  ODTE_EXPECTS(year <= 2050);
+  ODTE_EXPECTS(month >= 1);
+  ODTE_EXPECTS(month <= 12);
+  ODTE_EXPECTS(day >= 1);
+  ODTE_EXPECTS(day <= max_day(year, month));
 
   const std::uint32_t val =
       static_cast<std::uint32_t>(year) * 10000 +
@@ -58,37 +54,22 @@ Date Date::from_components(std::uint16_t year, std::uint8_t month,
   return Date(val);
 }
 
-std::uint32_t Date::value() const {
-  boost::contract::check c = boost::contract::function();
-  return value_;
-}
+std::uint32_t Date::value() const { return value_; }
 
-bool Date::is_valid() const {
-  boost::contract::check c = boost::contract::function();
-  return valid_;
-}
+bool Date::is_valid() const { return valid_; }
 
 std::uint16_t Date::year() const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([valid_ = &valid_] {
-        BOOST_CONTRACT_ASSERT(*valid_);
-      });
+  ODTE_EXPECTS(valid_);
   return static_cast<std::uint16_t>(value_ / 10000);
 }
 
 std::uint8_t Date::month() const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([valid_ = &valid_] {
-        BOOST_CONTRACT_ASSERT(*valid_);
-      });
+  ODTE_EXPECTS(valid_);
   return static_cast<std::uint8_t>((value_ % 10000) / 100);
 }
 
 std::uint8_t Date::day() const {
-  boost::contract::check c = boost::contract::function()
-      .precondition([valid_ = &valid_] {
-        BOOST_CONTRACT_ASSERT(*valid_);
-      });
+  ODTE_EXPECTS(valid_);
   return static_cast<std::uint8_t>(value_ % 100);
 }
 

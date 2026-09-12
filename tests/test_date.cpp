@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <boost/contract.hpp>
-
+#include "odte/contract.hpp"
 #include "odte/domain/date.hpp"
 
 using namespace odte::domain;
@@ -20,6 +19,36 @@ TEST(DateTest, InvalidDate) {
 TEST(DateTest, LeapYear) {
     Date date(20240229);
     EXPECT_TRUE(date.is_valid());
+}
+
+TEST(DateTest, LeapYear2000) {
+    Date date(20000229);
+    EXPECT_TRUE(date.is_valid());
+}
+
+TEST(DateTest, YearBeforeMin) {
+    Date date(19990101);
+    EXPECT_FALSE(date.is_valid());
+}
+
+TEST(DateTest, YearAfterMax) {
+    Date date(20510101);
+    EXPECT_FALSE(date.is_valid());
+}
+
+TEST(DateTest, MonthZero) {
+    Date date(20240015);
+    EXPECT_FALSE(date.is_valid());
+}
+
+TEST(DateTest, DayZero) {
+    Date date(20240100);
+    EXPECT_FALSE(date.is_valid());
+}
+
+TEST(DateTest, DayOutOfRange) {
+    Date date(20240132);
+    EXPECT_FALSE(date.is_valid());
 }
 
 TEST(DateTest, NonLeapYear) {
@@ -46,7 +75,7 @@ TEST(DateTest, FromComponents) {
 }
 
 TEST(DateTest, FromComponentsInvalidDay) {
-    EXPECT_THROW(Date::from_components(2024, 4, 31), boost::contract::assertion_failure);
+    EXPECT_THROW(Date::from_components(2024, 4, 31), odte::contract::violation);
 }
 
 TEST(DateTest, Equality) {

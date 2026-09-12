@@ -1,14 +1,15 @@
 #pragma once
 
 #include <array>
-#include <boost/contract.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
+
+#include "odte/contract.hpp"
 
 namespace odte::domain {
 
-class BusinessName
-    : private boost::contract::constructor_precondition<BusinessName> {
+class BusinessName {
  public:
   static constexpr std::size_t kMaxSize = 100;
   using Storage = std::array<char, kMaxSize + 1>;
@@ -29,9 +30,7 @@ class BusinessName
   }
 
   void invariant() const {
-    if (valid_) {
-      BOOST_CONTRACT_ASSERT(data_[0] != '\0');
-    }
+    ODTE_INVARIANT(valid_ == (data_[0] != '\0'));
   }
 
  private:

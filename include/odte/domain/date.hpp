@@ -1,7 +1,8 @@
 #pragma once
 
-#include <boost/contract.hpp>
 #include <cstdint>
+
+#include "odte/contract.hpp"
 
 namespace odte::domain {
 
@@ -46,8 +47,8 @@ class Date {
 
   void invariant() const {
     if (valid_) {
-      BOOST_CONTRACT_ASSERT(value_ >= 20000101);
-      BOOST_CONTRACT_ASSERT(value_ <= 20501231);
+      ODTE_INVARIANT(value_ >= 20000101);
+      ODTE_INVARIANT(value_ <= 20501231);
     }
   }
 

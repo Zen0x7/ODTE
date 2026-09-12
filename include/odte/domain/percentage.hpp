@@ -1,7 +1,8 @@
 #pragma once
 
-#include <boost/contract.hpp>
 #include <cstdint>
+
+#include "odte/contract.hpp"
 
 namespace odte::domain {
 
@@ -41,8 +42,8 @@ class Percentage {
 
   void invariant() const {
     if (valid_) {
-      BOOST_CONTRACT_ASSERT(hundredths_ >= 1);
-      BOOST_CONTRACT_ASSERT(hundredths_ <= kMaxHundredths);
+      ODTE_INVARIANT(hundredths_ >= 1);
+      ODTE_INVARIANT(hundredths_ <= kMaxHundredths);
     }
   }
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <boost/contract.hpp>
 #include <cstdint>
 
+#include "odte/contract.hpp"
 #include "odte/domain/date.hpp"
 
 namespace odte::domain {
@@ -43,10 +43,10 @@ class DateTime {
 
   void invariant() const {
     if (valid_) {
-      BOOST_CONTRACT_ASSERT(date_.is_valid());
-      BOOST_CONTRACT_ASSERT(hour_ < 24);
-      BOOST_CONTRACT_ASSERT(minute_ < 60);
-      BOOST_CONTRACT_ASSERT(second_ < 60);
+      ODTE_INVARIANT(date_.is_valid());
+      ODTE_INVARIANT(hour_ < 24);
+      ODTE_INVARIANT(minute_ < 60);
+      ODTE_INVARIANT(second_ < 60);
     }
   }
 

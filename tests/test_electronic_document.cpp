@@ -27,14 +27,32 @@ TEST(ElectronicDocumentTest, AddReference) {
     EXPECT_EQ(doc.reference_count, 1u);
 }
 
+TEST(ElectronicDocumentTest, AddReferenceOverflow) {
+    ElectronicDocument doc;
+    doc.reference_count = kMaxReferences;
+    EXPECT_FALSE(doc.add_reference(Reference{}));
+}
+
 TEST(ElectronicDocumentTest, AddAdjustment) {
     ElectronicDocument doc;
     EXPECT_TRUE(doc.add_adjustment(Adjustment{}));
     EXPECT_EQ(doc.adjustment_count, 1u);
 }
 
+TEST(ElectronicDocumentTest, AddAdjustmentOverflow) {
+    ElectronicDocument doc;
+    doc.adjustment_count = kMaxAdjustments;
+    EXPECT_FALSE(doc.add_adjustment(Adjustment{}));
+}
+
 TEST(ElectronicDocumentTest, AddSubtotalSummary) {
     ElectronicDocument doc;
     EXPECT_TRUE(doc.add_subtotal_summary(SubtotalSummary{}));
     EXPECT_EQ(doc.subtotal_summary_count, 1u);
+}
+
+TEST(ElectronicDocumentTest, AddSubtotalSummaryOverflow) {
+    ElectronicDocument doc;
+    doc.subtotal_summary_count = kMaxSubtotalSummaries;
+    EXPECT_FALSE(doc.add_subtotal_summary(SubtotalSummary{}));
 }
