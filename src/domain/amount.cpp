@@ -1,7 +1,6 @@
 #include "odte/domain/amount.hpp"
 
 #include <limits>
-#include <stdexcept>
 
 namespace odte::domain {
 
@@ -35,20 +34,6 @@ bool Amount::add(const Amount& other, Amount& result) const {
   }
   result = Amount(value_ + other.value_);
   return true;
-}
-
-Amount operator+(const Amount& a, const Amount& b) {
-  boost::contract::check c = boost::contract::function()
-      .precondition([&a, &b] {
-        BOOST_CONTRACT_ASSERT(a.is_valid());
-        BOOST_CONTRACT_ASSERT(b.is_valid());
-      });
-
-  Amount result;
-  if (!a.add(b, result)) {
-    throw std::overflow_error("Amount addition overflow");
-  }
-  return result;
 }
 
 }  // namespace odte::domain

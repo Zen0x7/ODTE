@@ -2,6 +2,7 @@
 
 #include <boost/contract.hpp>
 #include <cstdint>
+#include <stdexcept>
 
 namespace odte::domain {
 
@@ -37,7 +38,13 @@ class Amount {
     return lhs.value_ >= rhs.value_;
   }
 
-  friend Amount operator+(const Amount& a, const Amount& b);
+  friend Amount operator+(const Amount& a, const Amount& b) {
+    Amount result;
+    if (!a.add(b, result)) {
+      throw std::overflow_error("Amount addition overflow");
+    }
+    return result;
+  }
 
   bool add(const Amount& other, Amount& result) const;
 
