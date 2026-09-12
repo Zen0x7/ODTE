@@ -17,8 +17,8 @@ class TaxNumber {
   TaxNumber() = default;
   explicit TaxNumber(const char* value);
 
-  const char* value() const;
-  bool is_valid() const;
+  [[nodiscard]] const char* value() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend bool operator==(const TaxNumber& lhs, const TaxNumber& rhs) {
     return lhs.valid_ && rhs.valid_ &&

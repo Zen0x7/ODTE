@@ -17,8 +17,8 @@ class BusinessName {
   BusinessName() = default;
   explicit BusinessName(const char* value);
 
-  const char* value() const;
-  bool is_valid() const;
+  [[nodiscard]] const char* value() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend bool operator==(const BusinessName& lhs, const BusinessName& rhs) {
     return lhs.valid_ && rhs.valid_ &&

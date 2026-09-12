@@ -46,4 +46,4 @@ jobs:
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
 
       - name: Run clang-tidy
-        run: clang-tidy src/*.cpp tests/*.cpp -p build
+        run: clang-tidy src/*.cpp tests/*.cpp -p build --quiet

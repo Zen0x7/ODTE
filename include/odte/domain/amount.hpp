@@ -7,7 +7,7 @@
 
 namespace odte::domain {
 
-enum class AmountError {
+enum class AmountError : std::uint8_t {
   NEGATIVE,
   EXCEEDS_SCHEMA_MAX,
 };
@@ -30,8 +30,8 @@ class Amount {
       const Amount& other) const;
 
   [[nodiscard]] friend std::expected<Amount, AmountError> operator+(
-      const Amount& a, const Amount& b) {
-    return a.add(b);
+      const Amount& lhs, const Amount& rhs) {
+    return lhs.add(rhs);
   }
 
   friend bool operator==(const Amount& lhs, const Amount& rhs) {

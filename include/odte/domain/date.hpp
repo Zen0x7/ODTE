@@ -14,12 +14,12 @@ class Date {
   static Date from_components(std::uint16_t year, std::uint8_t month,
                               std::uint8_t day);
 
-  std::uint32_t value() const;
-  bool is_valid() const;
+  [[nodiscard]] std::uint32_t value() const;
+  [[nodiscard]] bool is_valid() const;
 
-  std::uint16_t year() const;
-  std::uint8_t month() const;
-  std::uint8_t day() const;
+  [[nodiscard]] std::uint16_t year() const;
+  [[nodiscard]] std::uint8_t month() const;
+  [[nodiscard]] std::uint8_t day() const;
 
   friend bool operator==(const Date& lhs, const Date& rhs) {
     return lhs.value_ == rhs.value_;

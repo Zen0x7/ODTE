@@ -13,8 +13,8 @@ class Percentage {
   Percentage() = default;
   explicit Percentage(std::uint32_t hundredths);
 
-  std::uint32_t hundredths() const;
-  bool is_valid() const;
+  [[nodiscard]] std::uint32_t hundredths() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend bool operator==(const Percentage& lhs, const Percentage& rhs) {
     return lhs.hundredths_ == rhs.hundredths_;

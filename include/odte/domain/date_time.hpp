@@ -13,11 +13,11 @@ class DateTime {
   DateTime(const Date& date, std::uint8_t hour, std::uint8_t minute,
            std::uint8_t second);
 
-  const Date& date() const;
-  std::uint8_t hour() const;
-  std::uint8_t minute() const;
-  std::uint8_t second() const;
-  bool is_valid() const;
+  [[nodiscard]] const Date& date() const;
+  [[nodiscard]] std::uint8_t hour() const;
+  [[nodiscard]] std::uint8_t minute() const;
+  [[nodiscard]] std::uint8_t second() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend bool operator==(const DateTime& lhs, const DateTime& rhs) {
     return lhs.date_ == rhs.date_ && lhs.hour_ == rhs.hour_ &&
